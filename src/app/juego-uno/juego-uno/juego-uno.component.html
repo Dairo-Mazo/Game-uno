@@ -1,0 +1,103 @@
+<div class="container text-center" style="display: flex; justify-content: center; align-items: center;">
+
+  <div class="card" style="top: 80px;">
+    <div class="card-header">
+      Cartas del oponente
+    </div>
+
+    <div class="card-body">
+      <!-- Cartas que le corresponden al Pc -->
+      <div class="row">
+        <div class="col" *ngFor="let card of cardsPc">
+          <div class="card" [ngStyle]="{'background': card.color,'height': '150px', 'width': '110px'}">
+
+            <!-- Header card -->
+            <div class="card-tittle" style="text-align: left; font-size: 18px; color: white; font-weight: bold; -webkit-text-stroke: 1px black; padding-left: 5px;" >
+              {{card.card}}
+            </div>
+
+             <!-- Body card -->
+            <div class="card-body" [ngStyle]="{'display': 'flex', 'justify-content': 'center', 
+            'align-items': 'center', 'border-radius': '50%', 'background-color': 'white', 'color': card.color}">
+             <h1 style="font-weight: 600; -webkit-text-stroke: 1px black;">{{card.card}}</h1> 
+            </div>
+
+             <!-- Footer card -->
+            <div class="card-tittle" style="text-align: right; color: white; font-weight: bold; -webkit-text-stroke: 1px black; padding-right: 5px;">
+              {{card.card}}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      
+
+      <br>
+      <br>
+
+      <!-- Centro del juego -- Carta que se debe colocar -->
+      <div class="container">
+        <div class="row justify-content-center" style="align-items: center;">
+          <div class="card" *ngFor="let card of cardsGame" [ngStyle]="{'height': '150px', 'width': '110px', 'color': card.color, 'background': card.color}">
+
+            <!-- Header card -->
+            <div class="card-tittle" style="text-align: left; font-size: 18px; color: white; font-weight: bold; -webkit-text-stroke: 1px black; padding-left: 5px;" >
+              {{card.card}}
+            </div>
+
+            <!-- Body card -->
+            <div class="card-body" style="display: flex; justify-content: center; align-items: center; border-radius: 50%; background-color: white;">
+            <h1 style="font-weight: 600; -webkit-text-stroke: 1px black;">{{card.card}} </h1> 
+            </div>
+
+            <!-- Footer card -->
+            <div class="card-tittle" style="text-align: right; color: white; font-weight: bold; -webkit-text-stroke: 1px black; padding-right: 5px;">
+            {{card.card}}
+            </div>
+            
+
+          </div>
+        </div>
+
+        <div class="col" style="font-size: 30px; font-weight: 600; margin-top: 20px;"> {{message}} </div>
+      </div>
+
+      <br>
+      <br>
+
+      <!-- Cartas del jugador -->
+      <div class="row">
+        <div class="col" *ngFor="let card of cardsUser; let index = index">
+          <div class="card" style="border: none;" [ngStyle]="{'background': card.color,'height': '150px', 'width': '110px', 'cursor': 'pointer'}" (click)="play(card.card, card.color, index)">
+
+            <!-- Header card -->
+            <div class="card-tittle" style="text-align: left; font-size: 18px; color: white; font-weight: bold; -webkit-text-stroke: 1px black; padding-left: 5px;" >
+              {{card.card}}
+            </div>
+
+            <!-- Body card -->
+            <div class="card-body" [ngStyle]="{'display': 'flex', 'justify-content': 'center', 
+            'align-items': 'center', 'border-radius': '50%', 'background-color': 'white', 'color': card.color}">
+            <h1 style="font-weight: 600; -webkit-text-stroke: 1px black;">{{card.card}}</h1> 
+            </div>
+
+
+            <!-- Footer card -->
+            <div class="card-tittle" style="text-align: right; color: white; font-weight: bold; -webkit-text-stroke: 1px black; padding-right: 5px;">
+              {{card.card}}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      Tus cartas
+    </div>
+  
+  </div>
+
+</div>
+
