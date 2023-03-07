@@ -1,0 +1,54 @@
+#component-uno{
+    background-color: #111b21;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh;
+}
+
+.card-tittle{
+    font-size: 13px;
+    color: white;
+    font-weight: 600;
+}
+
+#cardsPc{
+    height: 150px;
+    width: 110px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-color: #111b21;
+    border: white solid 5px;
+    border-radius: 10px;
+    padding: 0px 4px;
+}
+
+
+#cardsUser{
+    height: 150px;
+    width: 110px;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    margin-top: 20px;
+    border: white solid 5px;
+    border-radius: 10px;
+    padding: 0px 4px;
+}
+
+#cardsUser:hover{
+    transform: translateY(-20px);
+    box-shadow: 0 20px 10px rgba(0, 0, 0, 0.233);
+}
+
+
+#content-cards{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: white;
+    
+}
+
+.getCards{
+    cursor: pointer; 
+}
