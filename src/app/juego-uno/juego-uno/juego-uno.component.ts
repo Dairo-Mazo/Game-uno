@@ -23,10 +23,11 @@ export class JuegoUnoComponent  implements OnInit{
   public message: string = 'Tu turno!';
   public spinner: boolean = false;
   public haveCard: any;
-  public valuesCards = [0,1,2,3,4,5,6,7,8,9];
+  public valuesCards = [0,1,2,3,4,5,6,7,8,9, 'color', '+2', '+4', '🛇'];
   public valueColors = ['#0297dd', '#eb313d', '#34974b', '#ffc827']
   public classGetcards: boolean = false;
   public turn: boolean = true;
+  public cardSpecial: any = []
 
 
   //Función que comienza el juego
@@ -66,7 +67,8 @@ export class JuegoUnoComponent  implements OnInit{
     let haveCard = false;
 
     this.cardsUser.forEach((element:any) => {
-      if(element.card == this.cardsGame[0].card || element.color == this.cardsGame[0].color){
+      if(element.card === this.cardsGame[0].card || element.color == this.cardsGame[0].color && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4'
+        || element.card == 'color'){
         
         element.play = true;
         haveCard = true;
@@ -74,8 +76,16 @@ export class JuegoUnoComponent  implements OnInit{
     });
 
     if(haveCard == false){
-      this.message = 'Debes tomar una carta de la mesa';
-      this.classGetcards = true; 
+
+      if(this.cardsGame[0].card === '+2' || this.cardsGame[0].card === '+4'){
+        
+        this.getCards('user', true);
+
+      }else{
+        this.message = 'Debes tomar una carta de la mesa';
+        this.classGetcards = true; 
+      }
+
     }else {
       this.message = 'Tu turno!'
       this.classGetcards = false; 
@@ -90,29 +100,24 @@ export class JuegoUnoComponent  implements OnInit{
   play(card:any, color:any, index:any, turn:any){
 
     //Valida si el usuario tiene una carta para jugar
-    if(this.cardsGame[0].card == card && turn == true|| this.cardsGame[0].color == color && turn == true){
+    if(this.cardsGame[0].card === card && turn == true
+     || this.cardsGame[0].color == color && turn == true && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4' || card == 'color'
+     || this.cardsGame[0].color == color && turn == true && this.cardsGame[0].card == '+2' && this.cardsGame[0].card == '+4' || card == 'color'
+     || this.cardsGame[0].card == '+2' && card == '+4' || this.cardsGame[0].card == '+4' && card == '+2'){
 
-      this.cardsGame = []
-      this.cardsGame.push({card:card, color:color})
-
-      this.cardsUser.splice(index,1)
-
-      console.log('Tus cartas', this.cardsUser)
-
-      this.message = ''
-      this.spinner = true;
-      this.turn = false;
-
-      //Valida si no tiene cartas para finalizar el juego
-      if(this.cardsUser.length == 0){
-        this.finishGame(); 
+      this.cardsGame = [];
+      if(card == 'color'){
+        this.cardSpecial = [];
+        let dialogRef = this.modal.open(ModalComponent, { height: '400px', width: '600px', data:{type: 'cardSpecial', player: ''}, disableClose: true});
+  
+        dialogRef.afterClosed().subscribe(data =>{       
+          color = data.data;
+          this.deleteCardsUsage(index, card, color)
+        })
 
       }else{
-        setTimeout(() => {
-          this.playPc()
-        }, 1000);
+        this.deleteCardsUsage(index, card, color);
       }
-
 
 
     }else{
@@ -122,48 +127,114 @@ export class JuegoUnoComponent  implements OnInit{
     }
   }
 
+  //Elimina las cartas del usuario utilizadas
+  deleteCardsUsage(index:any, card:any, color:any){
+
+    this.cardsUser.splice(index,1)
+
+    if(card === '+2'){
+      this.cardSpecial.push(2);
+    }else if(card === '+4'){
+      this.cardSpecial.push(4);
+    }
+
+
+    this.cardsGame.push({card:card, color:color})
+
+    this.message = ''
+    this.spinner = true;
+    this.turn = false;
+
+    //Valida si no tiene cartas para finalizar el juego
+    if(this.cardsUser.length == 0){
+      this.finishGame(); 
+
+    }else if(card == '🛇'){
+      this.message = 'Bloqueaste el turno del oponente'
+      this.spinner = true;
+      this.turn = true;
+      setTimeout(() => {
+        this.spinner = false;
+        this.validateCards();
+      }, 1000);
+
+    }else{
+      setTimeout(() => {
+        this.playPc()
+      }, 1000);
+    }
+  }
 
   //Función para jugar cartas de la Pc
   playPc(){
 
-    let value:any = [], card: any, breakClicle:boolean = true
-      this.spinner = false;
-      this.turn = false;
-    
-      this.cardsPc.forEach((element:any) => {
+    let value:any = [], card: any, breakClicle:boolean = true;
+    this.spinner = false;
+    this.turn = false;
+  
+    this.cardsPc.forEach((element:any) => {
 
-        if(element.card == this.cardsGame[0].card || element.color == this.cardsGame[0].color){
-          value.push({card: element.card, color: element.color})
+      if(element.card == this.cardsGame[0].card && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4'
+        || element.color == this.cardsGame[0].color && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4'){
+
+        value.push({card: element.card, color: element.color})
+
+      }else if(element.card == 'color'){
+
+        this.cardSpecial = [];
+        let color = this.valueColors[Math.floor(Math.random() * this.valueColors.length)];
+        value.push({card: element.card, color: color})
+
+      }else if(element.card === '+2' || element.card === '+4'){
+
+        if(element.card == '+2'){
+          this.cardSpecial.push(2);
+        }else {
+          this.cardSpecial.push(4);
         }
 
+        value.push({card: element.card, color: element.color})
+      }
+
+      
+    });
+
+    //Validate si tiene cartas para jugar
+    if(value.length != 0){
+      this.cardsGame = []
+
+      card = value[Math.floor(Math.random() * value.length)];
+      this.cardsGame.push({card:card.card, color:card.color})
+
+      this.cardsPc.forEach((element: any, index: any) => {
+        if(element.card === card.card && element.color === card.color && breakClicle == true){
+          
+          this.cardsPc.splice(index,1);
+          breakClicle = false;
+        }
       });
 
-      //Validate si tiene cartas para jugar
-      if(value.length != 0){
-        this.cardsGame = []
+      //Valida si no tiene cartas para finalizar el juego
+      if(this.cardsPc.length == 0 || this.cardsUser.length == 0){
+        this.finishGame();
+  
+      }else if(card.card == '🛇'){
+        this.message = 'El oponente bloqueo tu turno'
+        this.spinner = true;
+        this.turn = false;
 
-        card = value[Math.floor(Math.random() * value.length)];
-        this.cardsGame.push({card:card.card, color:card.color})
-
-        this.cardsPc.forEach((element: any, index: any) => {
-          if(element.card == card.card && element.color == card.color && breakClicle == true){
-            
-            this.cardsPc.splice(index,1);
-            breakClicle = false;
-          }
-        });
-
-        //Valida si no tiene cartas para finalizar el juego
-        if(this.cardsPc.length == 0 || this.cardsUser.length == 0){
-          this.finishGame();
-    
-        }else{
-          this.validateCards();
-        }
+        setTimeout(() => {
+          this.spinner = false;
+          this.playPc();
+        }, 2000);
 
       }else{
-        this.getCards('Pc', true)
-      }    
+        this.validateCards();
+      }
+
+    }else{
+      this.getCards('Pc', true)
+    }    
     
   }
 
@@ -174,32 +245,107 @@ export class JuegoUnoComponent  implements OnInit{
 
     //Cartas para la Pc
     if(type == 'Pc' && action == true){
-      card = this.valuesCards[Math.floor(Math.random() * this.valuesCards.length)];
-      color = this.valueColors[Math.floor(Math.random() * this.valueColors.length)];
 
-      this.cardsPc.push({card:card, color:color})
+      if(this.cardSpecial.length != 0){
+        let cards:any = 0;
 
-      this.message = 'El oponente tomó una carta de la mesa';
+        this.cardSpecial.forEach((element:any) => {
+          cards = element + cards;
+        });
 
-      setTimeout(() => {
-        this.message = 'Tu turno!';
-        this.validateCards()
-      }, 2000);
+        for (let i = 0; i < cards; i++) {
+          card = this.valuesCards[Math.floor(Math.random() * this.valuesCards.length)];
+          color = this.valueColors[Math.floor(Math.random() * this.valueColors.length)];
+    
+          this.cardsPc.push({card:card, color:color})
+          
+        }
+
+        this.cardSpecial = [];
+        this.message = `El oponente tomó ${cards} cartas`;
+
+        
+        setTimeout(() => {
+          this.cardsGame[0].card = 'color'
+          this.message = 'Se quita la carta especial de la mesa';
+        }, 2000);
+
+        setTimeout(() => {
+          this.message = 'Tu turno!';
+          this.validateCards()
+        }, 4000);
+
+
+      }else {
+        card = this.valuesCards[Math.floor(Math.random() * this.valuesCards.length)];
+        color = this.valueColors[Math.floor(Math.random() * this.valueColors.length)];
+  
+        this.cardsPc.push({card:card, color:color})
+  
+        this.message = 'El oponente tomó una carta de la mesa';
+  
+        setTimeout(() => {
+          this.message = 'Tu turno!';
+          this.validateCards()
+        }, 2000);
+      }
+
+
+      
 
      //Cartas para el usuario 
-    }else if(type == 'user' && action == true){
-      card = this.valuesCards[Math.floor(Math.random() * this.valuesCards.length)];
-      color = this.valueColors[Math.floor(Math.random() * this.valueColors.length)];
+    }else if(type == 'user' && action == true || type == 'user' && this.turn == true){
 
-      this.cardsUser.push({card:card, color:color})
+      if(this.cardSpecial.length != 0){
+        let cards:any = 0;
+
+        this.cardSpecial.forEach((element:any) => {
+          cards = element + cards;
+        });
+
+        for (let i = 0; i < cards; i++) {
+          card = this.valuesCards[Math.floor(Math.random() * this.valuesCards.length)];
+          color = this.valueColors[Math.floor(Math.random() * this.valueColors.length)];
+    
+          this.cardsUser.push({card:card, color:color})
+          
+        }
+
+        this.cardSpecial = [];
+        this.message = `El oponete jugó una carta especial, se te asignaron ${cards} cartas`;
+        this.spinner = true;
+        this.turn = false; 
+        this.classGetcards = false; 
+
+        setTimeout(() => {
+          this.cardsGame[0].card = 'color';
+          this.message = 'Se quita la carta especial de la mesa';
+        }, 3000);
+
+        setTimeout(() => {
+          this.playPc()
+        }, 5000);
+
+
+      }else {
+        card = this.valuesCards[Math.floor(Math.random() * this.valuesCards.length)];
+        color = this.valueColors[Math.floor(Math.random() * this.valueColors.length)];
+  
+        this.cardsUser.push({card:card, color:color})
+        
+        this.message = 'Tomaste una carta de la mesa';
+        this.spinner = true;
+        this.turn = false; 
+        this.classGetcards = false; 
+  
+        setTimeout(() => {
+          this.playPc()
+        }, 1000);
+
+      }
+
+
       
-      this.message = 'Tomaste una carta de la mesa';
-      this.spinner = true;
-      this.classGetcards = false; 
-
-      setTimeout(() => {
-        this.playPc()
-      }, 1000);
       
     }
   }
@@ -209,11 +355,11 @@ export class JuegoUnoComponent  implements OnInit{
   finishGame(){
     if(this.cardsPc.length == 0){
       //LLama el componenete modal para mostrar el mensaje se finalización
-      this.modal.open(ModalComponent, {data: {type: 'Pc'}, disableClose: true} )
+      this.modal.open(ModalComponent, {data:{type: 'win', player: 'Pc'}, disableClose: true} )
       
     }else if (this.cardsUser.length == 0){
        //LLama el componenete modal para mostrar el mensaje se finalización
-      this.modal.open(ModalComponent, {data: {type: 'user'}, disableClose: true})
+      this.modal.open(ModalComponent, {data:{type: 'win', player: 'user'}, disableClose: true})
 
     }
   }

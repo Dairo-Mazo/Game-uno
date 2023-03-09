@@ -1,12 +1,23 @@
-<div class="container text-center">
+<div class="container text-center" *ngIf="data.type == 'win'">
     <h1 mat-dialog-title style="font-size: 18px; margin-bottom: 10px;">Fin del juego</h1>
 
-    <div mat-dialog-content *ngIf="win.type == 'user'">Felicidades, eres el ganador, jugastes todas las cartas, gracias por jugar!  :D</div>
+    <div mat-dialog-content *ngIf="data.player == 'user'">Felicidades, eres el ganador, jugastes todas las cartas, gracias por jugar!  :D</div>
 
-    <div mat-dialog-content *ngIf="win.type == 'Pc'">Auch, perdiste, tu oponente jugó todas sus cartas, gracias por jugar! :D</div>
+    <div mat-dialog-content *ngIf="data.player == 'Pc'">Perdiste, tu oponente jugó todas sus cartas, gracias por jugar! :D</div>
 
     <div mat-dialog-actions style="display: flex; justify-content: center;">
         <button mat-raised-button color="primary" (click)="navigateHome()">Volver a jugar</button>
     </div>
 
+</div>
+
+
+
+<div class="container-lg text-center" *ngIf="data.type == 'cardSpecial'">
+    <h3 class="card-tittle">Selecciona el color de la carta</h3>
+    <div class="row row-cols-2">
+        <div class="col" *ngFor="let item of colors">
+            <div class="card" [ngStyle]="{'background-color': item.color}" (click)="closeDialog(item.color)"></div>
+        </div>
+    </div>
 </div>

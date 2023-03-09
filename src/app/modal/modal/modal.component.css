@@ -1,0 +1,35 @@
+
+.card{
+    height: 150px;
+    margin-top: 10px;
+    cursor: pointer;
+    
+}
+
+.card:hover{
+    transform: translateY(-3px);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 15px;
+}
+
+.card-tittle{
+    font-weight: 600;
+    font-family: monospace;
+    margin-top: 10px;
+}
+
+.color1{
+    background-color: #0297dd;
+}
+
+.color2{
+    background-color: #ffc827;
+}
+
+.color3{
+    background-color: #34974b;
+}
+
+.color4{
+    background-color: #eb313d;
+}
+
