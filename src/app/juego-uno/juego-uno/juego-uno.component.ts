@@ -285,7 +285,7 @@ export class JuegoUnoComponent  implements OnInit{
         setTimeout(() => {
           this.message = 'Tu turno!';
           this.validateCards()
-        }, 2000);
+        }, 1000);
       }
 
 
