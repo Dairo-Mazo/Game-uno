@@ -23,12 +23,13 @@ export class JuegoUnoComponent  implements OnInit{
   public message: string = 'Tu turno!';
   public spinner: boolean = false;
   public haveCard: any;
-  public valuesCards = [0,1,2,3,4,5,6,7,8,9, 'color', '+2', '+4', '🛇'];
+  public valuesCards = ['+2', '+4', '🛇'];
   public valueColors = ['#0297dd', '#eb313d', '#34974b', '#ffc827']
   public classGetcards: boolean = false;
   public turn: boolean = true;
   public cardSpecial: any = []
 
+  //0,1,2,3,4,5,6,7,8,9, 'color', 
 
   //Función que comienza el juego
   startGame() {
@@ -174,8 +175,7 @@ export class JuegoUnoComponent  implements OnInit{
   
     this.cardsPc.forEach((element:any) => {
 
-      if(element.card == this.cardsGame[0].card && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4'
-        || element.color == this.cardsGame[0].color && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4'){
+      if(element.card == this.cardsGame[0].card || element.color == this.cardsGame[0].color ){
 
         value.push({card: element.card, color: element.color})
 
@@ -185,15 +185,6 @@ export class JuegoUnoComponent  implements OnInit{
         let color = this.valueColors[Math.floor(Math.random() * this.valueColors.length)];
         value.push({card: element.card, color: color})
 
-      }else if(element.card === '+2' || element.card === '+4'){
-
-        if(element.card == '+2'){
-          this.cardSpecial.push(2);
-        }else {
-          this.cardSpecial.push(4);
-        }
-
-        value.push({card: element.card, color: element.color})
       }
 
       
@@ -218,6 +209,14 @@ export class JuegoUnoComponent  implements OnInit{
       if(this.cardsPc.length == 0 || this.cardsUser.length == 0){
         this.finishGame();
   
+      }else if(card.card === '+2'){
+        this.cardSpecial.push(2);
+        this.validateCards();
+          
+      }else if(card.card === '+4'){
+        this.cardSpecial.push(4);
+        this.validateCards();
+
       }else if(card.card == '🛇'){
         this.message = 'El oponente bloqueo tu turno'
         this.spinner = true;
