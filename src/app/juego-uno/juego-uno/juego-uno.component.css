@@ -22,7 +22,7 @@
 }
 
 
-#cardsUser{
+.cardsUser{
     height: 150px;
     width: 110px;
     cursor: pointer;
@@ -31,12 +31,27 @@
     border: white solid 5px;
     border-radius: 10px;
     padding: 0px 4px;
+    filter: opacity(50%);
 }
 
-#cardsUser:hover{
+.cardsUser:hover{
     transform: translateY(-20px);
-    box-shadow: 0 20px 10px rgba(0, 0, 0, 0.233);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 15px 15px;
 }
+
+.animation{
+    filter: none;
+    transform: scale(1);
+    /* animation: gradient 2s infinite; */
+}
+
+/* @keyframes gradient {
+
+	50% {
+		box-shadow: #23d5ab 0px 5px 15px 0px;
+	}
+
+} */
 
 
 #content-cards{

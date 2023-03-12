@@ -71,6 +71,8 @@ export class JuegoUnoComponent  implements OnInit{
         
         element.play = true;
         haveCard = true;
+      }else{
+        element.play = false;
       }
     });
 
@@ -121,7 +123,7 @@ export class JuegoUnoComponent  implements OnInit{
 
     }else{
       if(turn){
-        this.message = `No puedes jugar esa carta, sigue las reglas`;
+        this.message = `No puedes jugar esta carta`;
       }
     }
   }
