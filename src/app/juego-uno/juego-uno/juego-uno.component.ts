@@ -67,7 +67,7 @@ export class JuegoUnoComponent  implements OnInit{
 
     this.cardsUser.forEach((element:any) => {
       if(element.card === this.cardsGame[0].card || element.color == this.cardsGame[0].color && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4'
-        || element.card == 'color'){
+        || element.card == 'color' || element.card === '+2' && this.cardsGame[0].card === '+4' || element.card === '+4' && this.cardsGame[0].card === '+2'){
         
         element.play = true;
         haveCard = true;
@@ -173,7 +173,7 @@ export class JuegoUnoComponent  implements OnInit{
   
     this.cardsPc.forEach((element:any) => {
 
-      if(element.card == this.cardsGame[0].card && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4' 
+      if(element.card === this.cardsGame[0].card || element.card == this.cardsGame[0].card && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4' 
         || element.color == this.cardsGame[0].color && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4'){
 
         value.push({card: element.card, color: element.color})
@@ -184,9 +184,11 @@ export class JuegoUnoComponent  implements OnInit{
         let color = this.valueColors[Math.floor(Math.random() * this.valueColors.length)];
         value.push({card: element.card, color: color})
 
+      }else if(element.card === '+2' && this.cardsGame[0].card === '+4' || element.card === '+4' && this.cardsGame[0].card === '+4'){
+
+        value.push({card: element.card, color: element.color})
       }
 
-      
     });
 
     //Validate si tiene cartas para jugar
