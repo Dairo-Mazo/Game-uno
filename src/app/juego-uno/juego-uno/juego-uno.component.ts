@@ -23,13 +23,11 @@ export class JuegoUnoComponent  implements OnInit{
   public message: string = 'Tu turno!';
   public spinner: boolean = false;
   public haveCard: any;
-  public valuesCards = ['+2', '+4', '🛇'];
+  public valuesCards = [0,1,2,3,4,5,6,7,8,9, 'color','+2', '+4', '🛇'];
   public valueColors = ['#0297dd', '#eb313d', '#34974b', '#ffc827']
   public classGetcards: boolean = false;
   public turn: boolean = true;
   public cardSpecial: any = []
-
-  //0,1,2,3,4,5,6,7,8,9, 'color', 
 
   //Función que comienza el juego
   startGame() {
@@ -175,7 +173,8 @@ export class JuegoUnoComponent  implements OnInit{
   
     this.cardsPc.forEach((element:any) => {
 
-      if(element.card == this.cardsGame[0].card || element.color == this.cardsGame[0].color ){
+      if(element.card == this.cardsGame[0].card && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4' 
+        || element.color == this.cardsGame[0].color && this.cardsGame[0].card !== '+2' && this.cardsGame[0].card !== '+4'){
 
         value.push({card: element.card, color: element.color})
 
